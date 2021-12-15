@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Microsoft cloud sandbox",
+            "request": "launch",
+            "type": "al",
+            "environmentType": "Sandbox",
+            "environmentName": "Ivan",
+            "tenant": "f5d68211-2a97-44dc-8b3b-fdfdf8075073",
+            //"startupObjectId": 22,
+            "startupObjectType": "Page",
+            "breakOnError": true,
+            "launchBrowser": true,
+            "dependencyPublishingOption": "Ignore",
+        }
+    ]
+}
