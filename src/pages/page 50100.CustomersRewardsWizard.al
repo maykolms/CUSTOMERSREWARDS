@@ -85,6 +85,52 @@ page 50100 "Customer Rewards Wizard"// asistente de las recompensas del cliente
                 }
             }
 
+
+            group(FirstHalfPage)
+            {
+                Caption = '';
+                Visible = FirstHalfPageVisible;
+
+                group("Welcome User")
+                {
+                    Caption = 'Welcome';
+                    Visible = FirstHalfPageVisible;
+
+                    group(Message)
+                    {
+                        Caption = '';
+                        InstructionalText = 'Please enter your user name or email address.';
+                        Visible = FirstHalfPageVisible;
+
+                        field(SpacerExtra; '')//es como una barra gris espaciadora
+                        {
+                            ApplicationArea = All;
+                            ShowCaption = false;
+                            Editable = false;
+                            MultiLine = false;
+                        }
+                    }
+
+                    group(entries)
+                    {
+                        Caption = '';
+
+                        field(UserName; UserName)
+                        {
+                            ApplicationArea = All;
+                            MultiLine = true;
+                            Editable = true;
+                            Caption = 'User Name: ';
+
+                            trigger OnValidate();
+                            begin
+                                /////////////////////////////////////////////////// ShowFirstPage;
+                            end;
+                        }
+                    }
+                }
+            }
+
             group(SecondPage)
             {
                 Caption = '';
@@ -134,6 +180,17 @@ page 50100 "Customer Rewards Wizard"// asistente de las recompensas del cliente
                         Caption = '';
                         InstructionalText = 'Click Finish to setup your rewards level and start using Customer Rewards.';
                         Visible = FinalPageVisible;
+                    }
+                    group(User)
+                    {
+                        field(SpacerExt2; Format(UserName))//es como una barra gris espaciadora
+                        {
+                            ApplicationArea = All;
+                            ShowCaption = false;
+                            Editable = false;
+                            MultiLine = false;
+                        }
+
                     }
                 }
             }
@@ -235,6 +292,9 @@ page 50100 "Customer Rewards Wizard"// asistente de las recompensas del cliente
             Step::First:
                 ShowFirstPage;
 
+            Step::FirstHalf:
+                ShowFirstHalfPage;
+
             Step::Second:
                 ShowSecondPage;
 
@@ -263,6 +323,7 @@ page 50100 "Customer Rewards Wizard"// asistente de las recompensas del cliente
     local procedure ShowFirstPage();
     begin
         FirstPageVisible := true;
+        FirstHalfPageVisible := false;
         SecondPageVisible := false;
         FinishEnabled := false;
         BackEnabled := false;
@@ -270,9 +331,21 @@ page 50100 "Customer Rewards Wizard"// asistente de las recompensas del cliente
         NextEnabled := EnableCustomerRewards;
     end;
 
+    local procedure ShowFirstHalfPage();
+    begin
+        FirstPageVisible := false;
+        FirstHalfPageVisible := true;
+        SecondPageVisible := false;
+        FinishEnabled := false;
+        BackEnabled := true;
+        ActivateEnabled := false;
+        NextEnabled := EnableCustomerRewards;
+    end;
+
     local procedure ShowSecondPage();
     begin
         FirstPageVisible := false;
+        FirstHalfPageVisible := false;
         SecondPageVisible := true;
         FinishEnabled := false;
         BackEnabled := true;
@@ -295,6 +368,7 @@ page 50100 "Customer Rewards Wizard"// asistente de las recompensas del cliente
         NextEnabled := true;
         ActivateEnabled := true;
         FirstPageVisible := false;
+        FirstHalfPageVisible := false;
         SecondPageVisible := false;
         FinalPageVisible := false;
     end;
@@ -311,10 +385,14 @@ page 50100 "Customer Rewards Wizard"// asistente de las recompensas del cliente
     var
         MediaRepositoryStandard: Record 9400;
         MediaResourcesStandard: Record 2000000182;
-        Step: Option First,Second,Finish;
+        Step: Option First,FirstHalf,Second,Finish;
         ActivationCode: Text;
+
+        UserName: Text;
+
         TopBannerVisible: Boolean;
         FirstPageVisible: Boolean;
+        FirstHalfPageVisible: Boolean;
         SecondPageVisible: Boolean;
         FinalPageVisible: Boolean;
         FinishEnabled: Boolean;
